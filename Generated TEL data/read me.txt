@@ -1,0 +1,43 @@
+% The following code can be used to extract the data in the figure
+% 1. 打开包含多条曲线的fig文件（如果图已经处于打开状态，可跳过此步）
+openfig('your_figure_name.fig'); 
+
+% 2. 获取当前坐标轴 (Axes) 的句柄
+ax = gca; 
+
+% 3. 查找该坐标轴下所有的“线”对象
+% 注意：如果是散点图，类型可能是 'scatter'，这里以标准折线图 'line' 为例
+lines = findobj(ax, 'Type', 'line'); 
+
+% 4. 获取曲线的总数
+num_lines = length(lines);
+
+% 5. 创建元胞数组（Cell Array）来存储数据
+% 使用元胞数组是因为不同曲线的数据点数量可能不同
+X_Data_All = cell(num_lines, 1);
+Y_Data_All = cell(num_lines, 1);
+Line_Names = cell(num_lines, 1);
+
+% 6. 遍历提取每一条曲线的数据
+for i = 1:num_lines
+    % 提取 X 和 Y 坐标数据
+    X_Data_All{i} = lines(i).XData;
+    Y_Data_All{i} = lines(i).YData;
+    
+    % 获取曲线的图例名称（如果有设置的话），方便区分
+    Line_Names{i} = lines(i).DisplayName; 
+    
+    % 如果曲线没有名字，按读取顺序自动命名
+    if isempty(Line_Names{i})
+        Line_Names{i} = sprintf('曲线 %d', i);
+    end
+end
+
+% 测试输出第一条曲线的X和Y的前5个数据点
+disp(['--- ', Line_Names{1}, ' 的前5个数据 ---']);
+disp('X坐标:'); disp(X_Data_All{1}(1:5));
+disp('Y坐标:'); disp(Y_Data_All{1}(1:5));
+
+% 将第一条曲线的数据组合成矩阵并导出为CSV
+data_matrix = [X_Data_All{1}', Y_Data_All{1}']; 
+csvwrite('curve1_data.csv', data_matrix);
