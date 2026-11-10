@@ -5,4 +5,4 @@ The TEL module aims to offer neural network time-critical online controllers for
 we provide matlab code for the numerical experiments of TEL control.
 
 # Notes
-More details are coming soon.
+Some of the data files are very large, so only a small amount of data was uploaded.
